@@ -48,12 +48,13 @@ class Ride(models.Model):
 
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
     passengers = models.ManyToManyField(Passenger)
-    pickup_location = models.PointField()  # Updated to PointField for geospatial location
-    dropoff_location = models.PointField()  # Updated to PointField for geospatial location
-    distance = models.FloatField()  # in kilometers
+    pickup_location = models.PointField()
+    dropoff_location = models.PointField()
+    distance = models.FloatField()
     price_per_head = models.DecimalField(max_digits=10, decimal_places=2)
     departure_time = models.DateTimeField()
     ride_status = models.CharField(max_length=20, choices=RIDE_STATUS_CHOICES, default='Available')
+    current_location = models.PointField(null=True, blank=True)  # New field for live location updates
 
     def __str__(self):
         return f"Ride {self.id} with {self.driver.user.username}"
@@ -64,13 +65,10 @@ class Ride(models.Model):
         return self.price_per_head * 1.6  # 160% of the distance traveled
 
     def is_available_for_passenger(self, passenger, requested_time):
-        # Check if the ride is available for the passenger at the requested time
         if self.ride_status != "Available":
             return False
-        # The time-based matching logic
         if self.departure_time != requested_time:
             return False
-        # Check if the driver has available seats
         if self.passengers.count() >= self.driver.available_seats:
             return False
         return True

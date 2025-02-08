@@ -1,11 +1,13 @@
-#settings.py
+#setting.py
 from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# GDAL and GEOS library paths
 GDAL_LIBRARY_PATH = 'C:/OSGeo4W/bin/gdal309.dll'
+GEOS_LIBRARY_PATH = os.path.join("C:\\OSGeo4W\\bin\\geos_c.dll")
 
 # Custom User Model setting
 AUTH_USER_MODEL = 'ride_sharing.User'
@@ -27,10 +29,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ride_sharing',  # Your app
+    'ride_sharing',  # main app
     'django.contrib.gis',  # PostGIS
     'rest_framework',  # Django REST framework
+    'channels',
 ]
+
+ASGI_APPLICATION = 'HickingSpot.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,8 +77,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',  # PostGIS backend
         'NAME': 'ridehailing_db',  # Replace with your database name
-        'USER': 'postgres',        # Your PostgreSQL username
-        'PASSWORD': 'Mfundo@1995',  # Replace with your actual password
+        'USER': 'postgres',        # PostgreSQL username
+        'PASSWORD': 'Mfundo@1995',  # password
         'HOST': 'localhost',       # Hostname
         'PORT': '5432',            # Default PostgreSQL port
     }
@@ -95,3 +105,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Stripe settings
 STRIPE_SECRET_KEY = 'your_stripe_secret_key'  # Replace with your actual Stripe secret key
 STRIPE_PUBLISHABLE_KEY = 'your_stripe_publishable_key'  # Replace with your actual Stripe publishable key
+
+# Twilio settings
+TWILIO_ACCOUNT_SID = 'your_twilio_account_sid'
+TWILIO_AUTH_TOKEN = 'your_twilio_auth_token'
+TWILIO_PHONE_NUMBER = 'your_twilio_phone_number'

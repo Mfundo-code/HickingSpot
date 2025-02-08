@@ -22,12 +22,12 @@ class PassengerSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'emergency_contact', 'live_location_sharing']
 
 class RideSerializer(serializers.ModelSerializer):
-    driver = DriverSerializer()  # Include nested driver information
-    passengers = PassengerSerializer(many=True)  # Include nested passenger information
+    driver = DriverSerializer()
+    passengers = PassengerSerializer(many=True)
 
     class Meta:
         model = Ride
-        fields = ['id', 'driver', 'passengers', 'pickup_location', 'dropoff_location', 'distance', 'price_per_head', 'departure_time', 'ride_status']
+        fields = ['id', 'driver', 'passengers', 'pickup_location', 'dropoff_location', 'distance', 'price_per_head', 'departure_time', 'ride_status', 'current_location']
 
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()  # Include nested author information
